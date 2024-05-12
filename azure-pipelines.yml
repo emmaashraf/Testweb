@@ -21,6 +21,8 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
+- task: PublishBuildArtifacts@1
+
 - task: VSBuild@1
   inputs:
     solution: '$(solution)'
@@ -28,7 +30,16 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
+-
 - task: VSTest@2
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Azure for Students(7fbcb69b-9aeb-4d0c-ab03-ceb198627e96)'
+    appType: 'webApp'
+    WebAppName: 'EmanElgamal'
+    packageForLinux: '$(build.artifactStagingDirectory)\WebApp.zip'
